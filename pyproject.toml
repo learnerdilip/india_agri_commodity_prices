@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "agri-market-fetcher"
+version = "0.1.0"
+description = "Tool to fetch real-time and historic agricultural market prices from e-NAM"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.31.0"
+pandas = "^2.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
