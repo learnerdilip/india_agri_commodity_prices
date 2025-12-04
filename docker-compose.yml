@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  core:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: enam_server
+    ports:
+      - "8000:8000"
+    volumes:
+      # Syncs your local folder with the container for hot-reloading code changes
+      - ./server:/app/server
+    env_file:
+      - .env
+    networks:
+      - enam_network
+
+  # Placeholder for your future frontend
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - core
+  #   networks:
+  #     - enam_network
+
+networks:
+  enam_network:
+    driver: bridge
