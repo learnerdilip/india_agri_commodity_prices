@@ -21,8 +21,8 @@ def get_trade_data(
 
 @router.get("/states")
 def get_all_states():
-    return get_unique_values("stateName")
+    return get_unique_values("state")
 
 @router.get("/commodities")
 def get_all_commodities():
-    return get_unique_values("commodityName")
+    return get_unique_values("commodity")

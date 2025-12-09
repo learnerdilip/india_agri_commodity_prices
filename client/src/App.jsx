@@ -1,20 +1,28 @@
 import { useEffect, useState } from "react";
-import { fetchTradeData, fetchStates } from "./services/api";
+import { fetchTradeData, fetchStates, fetchCommodities } from "./services/api";
 
 function App() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]);  
   const [states, setStates] = useState([]);
   const [selectedState, setSelectedState] = useState("");
+  const [commodities, setCommodities] = useState([]);  
+  const [selectedCommodity, setSelectedCommodity] = useState("");
 
   // 1. Load initial data
   useEffect(() => {
     fetchStates().then(setStates);
+    fetchCommodities().then(setCommodities);
     loadData();
   }, []);
 
   // 2. Fetch data when filters change
   const loadData = async () => {
-    const filters = selectedState ? { state: selectedState } : {};
+    const filters = {};
+    
+    // Only add filters if the user actually selected something
+    if (selectedState) filters.state = selectedState;
+    if (selectedCommodity) filters.commodity = selectedCommodity;
+
     const result = await fetchTradeData(filters);
     setData(result);
   };
@@ -24,16 +32,33 @@ function App() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-green-700 mb-6">eNAM Dashboard</h1>
 
-        {/* Filters */}
-        <div className="bg-white p-4 rounded shadow mb-6 flex gap-4">
-          <select 
-            className="border p-2 rounded w-64"
-            value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-          >
-            <option value="">-- All States --</option>
-            {states.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
+        <div className="bg-white p-4 rounded shadow mb-6 flex flex-wrap gap-4 items-end">
+          
+          {/* State Dropdown */}
+          <div className="flex flex-col">
+            <label className="text-sm font-semibold text-gray-600 mb-1">State</label>
+            <select 
+              className="border p-2 rounded w-64 focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
+            >
+              <option value="">-- All States --</option>
+              {states.map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+          </div>
+
+          {/* Commodity Dropdown */}
+          <div className="flex flex-col">
+            <label className="text-sm font-semibold text-gray-600 mb-1">Commodity</label>
+            <select 
+              className="border p-2 rounded w-64 focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={selectedCommodity}
+              onChange={(e) => setSelectedCommodity(e.target.value)}
+            >
+              <option value="">-- All Commodities --</option>
+              {commodities.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
           
           <button 
             onClick={loadData}
@@ -58,10 +83,10 @@ function App() {
             <tbody>
               {data.map((row) => (
                 <tr key={row._id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{row.fetched_date}</td>
-                  <td className="p-3">{row.stateName}</td>
-                  <td className="p-3">{row.apmcName}</td>
-                  <td className="p-3">{row.commodityName}</td>
+                  <td className="p-3">{row.created_at}</td>
+                  <td className="p-3">{row.state}</td>
+                  <td className="p-3">{row.apmc}</td>
+                  <td className="p-3">{row.commodity}</td>
                   <td className="p-3 font-bold">₹{row.modal_price}</td>
                 </tr>
               ))}

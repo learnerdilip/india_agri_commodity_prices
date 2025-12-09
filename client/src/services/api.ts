@@ -18,3 +18,8 @@ export const fetchStates = async () => {
   const response = await fetch(`${API_BASE}/enam-data/states`);
   return await response.json();
 };
+
+export const fetchCommodities = async () => {
+  const response = await fetch(`${API_BASE}/enam-data/commodities`);
+  return await response.json();
+};
