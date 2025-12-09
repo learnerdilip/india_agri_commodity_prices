@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  core:
+  server:
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -16,15 +16,23 @@ services:
     networks:
       - enam_network
 
-  # Placeholder for your future frontend
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - core
-  #   networks:
-  #     - enam_network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: enam_client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      # PREVENT overwriting node_modules inside container with local host version
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - server
+    networks:
+      - enam_network
 
 networks:
   enam_network:

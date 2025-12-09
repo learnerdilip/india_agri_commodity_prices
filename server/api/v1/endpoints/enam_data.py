@@ -7,7 +7,7 @@ from server.core.queries import fetch_filtered_data, build_filter_query, get_uni
 # Create the router instance
 router = APIRouter()
 
-@router.get("/", response_model=List[TradeDataResponse])
+@router.get("/")
 def get_trade_data(
     date: Optional[str] = Query(None, description="Format: YYYY-MM-DD"),
     state: Optional[str] = Query(None, description="Filter by State Name"),
